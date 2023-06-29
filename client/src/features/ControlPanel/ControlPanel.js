@@ -1,23 +1,57 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setPrice, setVolume, setWeight } from '../../store/slices/calculationSlice';
 
 import Button from '../../components/Button/Button';
 
 import './ControlPanel.scss';
 
 const ControlPanel = () => {
-  const [inputVolume, setInputVolume] = useState('');
-  const [inputWeight, setInputWeight] = useState('');
-  const [inputPrice, setInputPrice] = useState('');
+  const volume = useSelector((state) => state.calculation.volume);
+  const weight = useSelector((state) => state.calculation.weight);
+  const price = useSelector((state) => state.calculation.price);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCarrier, setSelectedCarrier] = useState('');
   const [ordersAmount, setOrdersAmount] = useState('');
   const [isWarehouse, setIsWarehouse] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const [calculationResult, setCalculationResult] = useState(0);
 
   const ordersOptions = [
     { id: 'option1', label: '1 order', value: 1 },
     { id: 'option2', label: '2 orders', value: 2 },
     { id: 'option3', label: 'Your value', value: '' },
   ];
+
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    dispatch(setVolume(newVolume));
+  }
+
+  const handleWeightChange = (e) => {
+    const newWeight = parseFloat(e.target.value);
+    dispatch(setWeight(newWeight));
+  }
+
+  const handlePriceChange = (e) => {
+    const newPrice = parseFloat(e.target.value);
+    dispatch(setPrice(newPrice));
+  }
+
+  useEffect(() => {
+    console.log(volume, weight, price); 
+  }, [volume, weight, price]);
+
+  const clearControlPanel = () => {
+    setCalculationResult(0);
+  }
+
+  const calculateResult = () => {
+    setCalculationResult(12345);
+  }
 
   return (
     <div className='control-panel'>
@@ -29,8 +63,7 @@ const ControlPanel = () => {
           className='control-panel__input'
           type="number"
           placeholder='m3'
-          value={inputVolume}
-          onChange={(e) => setInputVolume(e.target.value)}
+          onChange={handleVolumeChange}
         />
       </div>
       <div className="control-panel__input-container">
@@ -41,8 +74,7 @@ const ControlPanel = () => {
           className='control-panel__input'
           type="number"
           placeholder='kg'
-          value={inputWeight}
-          onChange={(e) => setInputWeight(e.target.value)}
+          onChange={handleWeightChange}
         />
       </div>
       <div className="control-panel__input-container">
@@ -53,8 +85,7 @@ const ControlPanel = () => {
           className='control-panel__input'
           type="number"
           placeholder='Euro'
-          value={inputPrice}
-          onChange={(e) => setInputPrice(e.target.value)}
+          onChange={handlePriceChange}
         />
       </div>
       <div className="control-panel__input-container">
@@ -98,10 +129,20 @@ const ControlPanel = () => {
       <div className="control-panel__btns">
         <Button
           text={'Calculate'}
+          action={calculateResult}
         />
         <Button
           text={'Cancel'}
+          action={clearControlPanel}
         />
+      </div>
+      <div className="control-panel__result">
+        <span className='control-panel__result-number'>
+          {calculationResult}
+        </span>
+        <span className='control-panel__result-currency'>
+          euro
+        </span>
       </div>
     </div>
   )

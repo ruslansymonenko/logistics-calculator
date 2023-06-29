@@ -1,6 +1,13 @@
-const Button = ({text}) => {
+import './Button.scss';
+
+const Button = ({text, action}) => {
   return (
-    <button>{text}</button>
+    <button 
+      className="button"
+      onClick={action}
+    >
+      {text}
+    </button>
   )
 }
 
