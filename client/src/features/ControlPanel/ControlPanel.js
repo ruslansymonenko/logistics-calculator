@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setPrice, setVolume, setWeight } from '../../store/slices/calculationSlice';
+import { setPrice, setVolume, setWeight, clearIndicators } from '../../store/slices/calculationSlice';
 
 import Button from '../../components/Button/Button';
 
@@ -46,11 +46,13 @@ const ControlPanel = () => {
   }, [volume, weight, price]);
 
   const clearControlPanel = () => {
+    dispatch(clearIndicators());
     setCalculationResult(0);
   }
 
   const calculateResult = () => {
-    setCalculationResult(12345);
+    let result = (volume * 200) + (weight * 12) + (price * 0.02)
+    setCalculationResult(result);
   }
 
   return (
@@ -63,6 +65,7 @@ const ControlPanel = () => {
           className='control-panel__input'
           type="number"
           placeholder='m3'
+          value={volume ? volume : ''}
           onChange={handleVolumeChange}
         />
       </div>
@@ -74,6 +77,7 @@ const ControlPanel = () => {
           className='control-panel__input'
           type="number"
           placeholder='kg'
+          value={weight ? weight : ''}
           onChange={handleWeightChange}
         />
       </div>
@@ -85,6 +89,7 @@ const ControlPanel = () => {
           className='control-panel__input'
           type="number"
           placeholder='Euro'
+          value={price ? price : ''}
           onChange={handlePriceChange}
         />
       </div>

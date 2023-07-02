@@ -35,6 +35,6 @@ export const calculationSlice = createSlice({
   }
 });
 
-export const {setVolume, setWeight, setPrice} = calculationSlice.actions;
+export const {setVolume, setWeight, setPrice, clearIndicators} = calculationSlice.actions;
 
 export default calculationSlice.reducer;
