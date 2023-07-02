@@ -2,12 +2,15 @@ import {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { setPrice, setVolume, setWeight, clearIndicators } from '../../store/slices/calculationSlice';
+import { fetchCountries } from '../../store/slices/countriesSlice';
 
 import Button from '../../components/Button/Button';
 
 import './ControlPanel.scss';
 
 const ControlPanel = () => {
+  const countries = useSelector((state) => state.countries);
+
   const volume = useSelector((state) => state.calculation.volume);
   const weight = useSelector((state) => state.calculation.weight);
   const price = useSelector((state) => state.calculation.price);
@@ -17,6 +20,11 @@ const ControlPanel = () => {
   const [isWarehouse, setIsWarehouse] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCountries());
+  }, [dispatch]);
+
 
   const [calculationResult, setCalculationResult] = useState(0);
 
@@ -42,7 +50,11 @@ const ControlPanel = () => {
   }
 
   useEffect(() => {
-    console.log(volume, weight, price); 
+    console.log(countries);
+  }, [countries])
+
+  useEffect(() => {
+    // console.log(volume, weight, price); 
   }, [volume, weight, price]);
 
   const clearControlPanel = () => {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import ControlPanel from '../ControlPanel/ControlPanel';
 
 import './Calculator.scss';
