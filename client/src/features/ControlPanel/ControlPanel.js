@@ -9,7 +9,7 @@ import Button from '../../components/Button/Button';
 import './ControlPanel.scss';
 
 const ControlPanel = () => {
-  const countries = useSelector((state) => state.countries);
+  const countries = useSelector((state) => state.countries.countries);
 
   const volume = useSelector((state) => state.calculation.volume);
   const weight = useSelector((state) => state.calculation.weight);
@@ -108,9 +108,14 @@ const ControlPanel = () => {
       <div className="control-panel__input-container">
         <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
           <option value="">Select country</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+          {countries ? countries.map(country => (
+            <option 
+              key={country.id}
+              value={country.id}
+            >
+                {country.country}
+            </option>
+          )) : ''}
         </select>
       </div>
       <div className="control-panel__input-container">

@@ -16,14 +16,16 @@ export const fetchCountries = () => {
 
 export const countriesSlice = createSlice({
   name: 'countries',
-  initialState: [],
+  initialState: {
+    countries: [],
+  },
   reducers: {
     setCountries: (state, action) => {
-      return action.payload;
+      state.countries = action.payload;
     }
   }
 });
 
 export const { setCountries } = countriesSlice.actions;
 
-export default countriesSlice;
+export default countriesSlice.reducer;
