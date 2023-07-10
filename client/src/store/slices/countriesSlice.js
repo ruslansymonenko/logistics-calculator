@@ -6,7 +6,6 @@ export const fetchCountries = () => {
     try {
       const response = await axios.get('http://localhost:3001/api/countries');
       const countries = response.data;
-      console.log(countries);
       dispatch(setCountries(countries));
     } catch (error) {
       console.log(error);

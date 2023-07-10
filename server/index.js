@@ -13,16 +13,20 @@ app.use(express.json());
 app.get('/api/countries', (req, res) => {
   const countries = [
     {
-      id: 111,
+      id: 'eu1',
       country: 'Italy'
     },
     {
-      id: 222,
+      id: 'eu2',
       country: 'Germany'
     },
     {
-      id: 333,
+      id: 'eu3',
       country: 'Spain'
+    },
+    {
+      id: 'eu4',
+      country: 'Poland'
     },
   ];
 

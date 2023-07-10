@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setPrice, setVolume, setWeight, clearIndicators } from '../../store/slices/calculationSlice';
+import { setPrice, setVolume, setWeight, setCountry, clearIndicators } from '../../store/slices/calculationSlice';
 import { fetchCountries } from '../../store/slices/countriesSlice';
 
 import Button from '../../components/Button/Button';
@@ -14,6 +14,8 @@ const ControlPanel = () => {
   const volume = useSelector((state) => state.calculation.volume);
   const weight = useSelector((state) => state.calculation.weight);
   const price = useSelector((state) => state.calculation.price);
+  const country = useSelector((state) => state.calculation.country);
+
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCarrier, setSelectedCarrier] = useState('');
   const [ordersAmount, setOrdersAmount] = useState('');
@@ -50,12 +52,16 @@ const ControlPanel = () => {
   }
 
   useEffect(() => {
-    console.log(countries);
-  }, [countries])
+    console.log(country); 
+  }, [volume, weight, price, country]);
 
   useEffect(() => {
-    // console.log(volume, weight, price); 
-  }, [volume, weight, price]);
+    if(selectedCountry) {
+      dispatch(setCountry(selectedCountry))
+    } else {
+      dispatch(setCountry(null))
+    }
+  }, [selectedCountry, dispatch])
 
   const clearControlPanel = () => {
     dispatch(clearIndicators());
@@ -106,7 +112,10 @@ const ControlPanel = () => {
         />
       </div>
       <div className="control-panel__input-container">
-        <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)}>
+        <select
+          className='control-panel__input-select'
+          value={selectedCountry} 
+          onChange={(e) => setSelectedCountry(e.target.value)}>
           <option value="">Select country</option>
           {countries ? countries.map(country => (
             <option 
@@ -119,7 +128,10 @@ const ControlPanel = () => {
         </select>
       </div>
       <div className="control-panel__input-container">
-        <select value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
+        <select
+          className='control-panel__input-select'
+          value={selectedCarrier} 
+          onChange={(e) => setSelectedCarrier(e.target.value)}>
           <option value="">Select carrier</option>
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
