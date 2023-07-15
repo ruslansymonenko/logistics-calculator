@@ -5,6 +5,7 @@ import { setPrice, setVolume, setWeight, setCountry, clearIndicators } from '../
 import { fetchCountries } from '../../store/slices/countriesSlice';
 
 import Button from '../../components/Button/Button';
+import Select from '../../components/Select/Select';
 
 import './ControlPanel.scss';
 
@@ -115,7 +116,8 @@ const ControlPanel = () => {
         <select
           className='control-panel__input-select'
           value={selectedCountry} 
-          onChange={(e) => setSelectedCountry(e.target.value)}>
+          onChange={(e) => setSelectedCountry(e.target.value)}
+        >
           <option value="">Select country</option>
           {countries ? countries.map(country => (
             <option 
@@ -128,15 +130,10 @@ const ControlPanel = () => {
         </select>
       </div>
       <div className="control-panel__input-container">
-        <select
-          className='control-panel__input-select'
-          value={selectedCarrier} 
-          onChange={(e) => setSelectedCarrier(e.target.value)}>
-          <option value="">Select carrier</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
-        </select>
+        <Select
+          selectValue={selectedCarrier}
+          setSelectValue={setSelectedCarrier}
+        ></Select>
       </div>
       <div className="control-panel__input-container">
         {ordersOptions.map((option => (
