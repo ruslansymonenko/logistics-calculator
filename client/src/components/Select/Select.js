@@ -1,15 +1,21 @@
 import './Select.scss';
 
-const Select = ({selectValue, setSelectValue}) => {
+const Select = ({selectValue, setSelectValue, text, options}) => {
   return (
     <select
-          className='select'
-          value={selectValue} 
-          onChange={(e) => setSelectValue(e.target.value)}>
-          <option value="">Select carrier</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+      className='select'
+      value={selectValue} 
+      onChange={(e) => setSelectValue(e.target.value)}
+    >
+      <option value="">{text}</option>
+      {options ? options.map(item => (
+        <option
+          value={item.id}
+          key={item.id}
+        >
+          {item.name}
+        </option>
+      )) : ''}
     </select>
   )
 }

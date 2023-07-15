@@ -2,31 +2,31 @@ export const getCountriesData = (req, res) => {
   const countries = [
     {
       id: 'eu1',
-      country: 'Italy'
+      name: 'Italy'
     },
     {
       id: 'eu2',
-      country: 'Germany'
+      name: 'Germany'
     },
     {
       id: 'eu3',
-      country: 'Spain'
+      name: 'Spain'
     },
     {
       id: 'eu4',
-      country: 'Poland'
+      name: 'Poland'
     },
     {
       id: 'eu5',
-      country: 'Greece'
+      name: 'Greece'
     },
     {
       id: 'eu6',
-      country: 'Greate britain'
+      name: 'Greate britain'
     },
     {
       id: 'eu7',
-      country: 'Czech republic'
+      name: 'Czech republic'
     },
   ];
 

@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setPrice, setVolume, setWeight, setCountry, clearIndicators } from '../../store/slices/calculationSlice';
+import { setPrice, setVolume, setWeight, setCountry, setCarrier, clearIndicators } from '../../store/slices/calculationSlice';
 import { fetchCountries } from '../../store/slices/countriesSlice';
 import { fetchCarriers } from '../../store/slices/carriersSlice';
 
@@ -18,6 +18,7 @@ const ControlPanel = () => {
   const weight = useSelector((state) => state.calculation.weight);
   const price = useSelector((state) => state.calculation.price);
   const country = useSelector((state) => state.calculation.country);
+  const carrier = useSelector((state) => state.calculation.carrier);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCarrier, setSelectedCarrier] = useState('');
@@ -56,16 +57,25 @@ const ControlPanel = () => {
   }
 
   useEffect(() => {
-    console.log(carriers); 
-  }, [volume, weight, price, country, carriers]);
+    console.log(country); 
+    console.log(carrier); 
+  }, [volume, weight, price, country, carrier]);
 
   useEffect(() => {
     if(selectedCountry) {
-      dispatch(setCountry(selectedCountry))
+      dispatch(setCountry(selectedCountry));
     } else {
-      dispatch(setCountry(null))
+      dispatch(setCountry(null));
     }
-  }, [selectedCountry, dispatch])
+  }, [selectedCountry, dispatch]);
+
+  useEffect(() => {
+    if(selectedCarrier) {
+      dispatch(setCarrier(selectedCarrier));
+    } else {
+      dispatch(setCarrier(null));
+    }
+  })
 
   const clearControlPanel = () => {
     dispatch(clearIndicators());
@@ -116,27 +126,22 @@ const ControlPanel = () => {
         />
       </div>
       <div className="control-panel__input-container">
-        <select
-          className='control-panel__input-select'
-          value={selectedCountry} 
-          onChange={(e) => setSelectedCountry(e.target.value)}
-        >
-          <option value="">Select country</option>
-          {countries ? countries.map(country => (
-            <option 
-              key={country.id}
-              value={country.id}
-            >
-                {country.country}
-            </option>
-          )) : ''}
-        </select>
+        <Select
+          selectValue={selectedCountry}
+          setSelectValue={setSelectedCountry}
+          text={"Select country"}
+          options={countries}
+          >
+        </Select>
       </div>
       <div className="control-panel__input-container">
         <Select
           selectValue={selectedCarrier}
           setSelectValue={setSelectedCarrier}
-        ></Select>
+          text={"Select carrier"}
+          options={carriers}
+        >
+        </Select>
       </div>
       <div className="control-panel__input-container">
         {ordersOptions.map((option => (
