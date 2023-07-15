@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setPrice, setVolume, setWeight, setCountry, clearIndicators } from '../../store/slices/calculationSlice';
 import { fetchCountries } from '../../store/slices/countriesSlice';
+import { fetchCarriers } from '../../store/slices/carriersSlice';
 
 import Button from '../../components/Button/Button';
 import Select from '../../components/Select/Select';
@@ -11,6 +12,7 @@ import './ControlPanel.scss';
 
 const ControlPanel = () => {
   const countries = useSelector((state) => state.countries.countries);
+  const carriers = useSelector((state) => state.carriers.carriers);
 
   const volume = useSelector((state) => state.calculation.volume);
   const weight = useSelector((state) => state.calculation.weight);
@@ -26,6 +28,7 @@ const ControlPanel = () => {
 
   useEffect(() => {
     dispatch(fetchCountries());
+    dispatch(fetchCarriers());
   }, [dispatch]);
 
 
@@ -53,8 +56,8 @@ const ControlPanel = () => {
   }
 
   useEffect(() => {
-    console.log(country); 
-  }, [volume, weight, price, country]);
+    console.log(carriers); 
+  }, [volume, weight, price, country, carriers]);
 
   useEffect(() => {
     if(selectedCountry) {
