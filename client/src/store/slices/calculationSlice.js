@@ -35,6 +35,9 @@ export const calculationSlice = createSlice({
     setOrdersAmount: (state, action) => {
       state.ordersAmount = action.payload
     },
+    setWarehousePayment: (state, action) => {
+      state.warehousePayment = action.payload
+    },
     clearIndicators: (state) => {
       state.volume = 0;
       state.weight = 0;
@@ -49,6 +52,6 @@ export const calculationSlice = createSlice({
   }
 });
 
-export const {setVolume, setWeight, setPrice, setCountry, setCarrier, setShippingRates, setOrdersAmount, clearIndicators} = calculationSlice.actions;
+export const {setVolume, setWeight, setPrice, setCountry, setCarrier, setShippingRates, setOrdersAmount, setWarehousePayment, clearIndicators} = calculationSlice.actions;
 
 export default calculationSlice.reducer;

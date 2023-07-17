@@ -1,9 +1,11 @@
 import {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setPrice, setVolume, setWeight, setCountry, setCarrier, setShippingRates, setOrdersAmount, clearIndicators } from '../../store/slices/calculationSlice';
+import { setPrice, setVolume, setWeight, setCountry, setCarrier, setShippingRates, setOrdersAmount, setWarehousePayment, clearIndicators } from '../../store/slices/calculationSlice';
 import { fetchCountries } from '../../store/slices/countriesSlice';
 import { fetchCarriers } from '../../store/slices/carriersSlice';
+
+import calculateLogistic from '../../helpers/calculateLogistic';
 
 import Button from '../../components/Button/Button';
 import Select from '../../components/Select/Select';
@@ -17,15 +19,19 @@ const ControlPanel = () => {
   const volume = useSelector((state) => state.calculation.volume);
   const weight = useSelector((state) => state.calculation.weight);
   const price = useSelector((state) => state.calculation.price);
+  const currency = useSelector((state) => state.calculation.price);
   const country = useSelector((state) => state.calculation.country);
   const carrier = useSelector((state) => state.calculation.carrier);
   const shippingRates = useSelector((state) => state.calculation.shippingRates);
   const ordersAmount = useSelector((state) => state.calculation.ordersAmount);
+  const warehousePayment = useSelector((state) => state.calculation.warehousePayment);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCarrier, setSelectedCarrier] = useState('');
   const [selectedOrdersAmount, setSelectedOrdersAmount] = useState('option1');
   const [isWarehouse, setIsWarehouse] = useState(false);
+
+  const [result, setResult] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -34,8 +40,6 @@ const ControlPanel = () => {
     dispatch(fetchCarriers());
   }, [dispatch]);
 
-
-  const [calculationResult, setCalculationResult] = useState(0);
 
   const ordersOptions = [
     { id: 'option1', label: '1 order', value: 1 },
@@ -61,10 +65,6 @@ const ControlPanel = () => {
   const findElementById = (array, id) => {
     return array.find(element => element.id === id);
   }
-
-  useEffect(() => {
-    console.log(ordersAmount);
-  }, [volume, weight, price, country, shippingRates, ordersAmount]);
 
   useEffect(() => {
     if(selectedCountry) {
@@ -96,17 +96,21 @@ const ControlPanel = () => {
     }
   }, [selectedOrdersAmount, dispatch]);
 
+  useEffect(() => {
+    dispatch(setWarehousePayment(isWarehouse));
+  }, [isWarehouse]);
+
 
   const clearControlPanel = () => {
     dispatch(clearIndicators());
-    setCalculationResult(0);
+    setResult(0);
     setSelectedCountry('');
     setSelectedCarrier('');
   }
 
   const calculateResult = () => {
-    let result = (volume * 200) + (weight * 12) + (price * 0.02)
-    setCalculationResult(result);
+    let calculationResult = calculateLogistic(volume, weight, price, currency, country, carrier, shippingRates, ordersAmount, warehousePayment);
+    setResult(calculationResult);
   }
 
   return (
@@ -199,7 +203,7 @@ const ControlPanel = () => {
       </div>
       <div className="control-panel__result">
         <span className='control-panel__result-number'>
-          {calculationResult}
+          {result}
         </span>
         <span className='control-panel__result-currency'>
           euro
