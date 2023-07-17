@@ -9,6 +9,7 @@ export const calculationSlice = createSlice({
     currency: 'EUR',
     country: null,
     carrier: null,
+    shippingRates: null,
     ordersAmount: 1,
     warehousePayment: false
   },
@@ -28,6 +29,12 @@ export const calculationSlice = createSlice({
     setCarrier: (state, action) => {
       state.carrier = action.payload
     },
+    setShippingRates: (state, action) => {
+      state.shippingRates = action.payload
+    },
+    setOrdersAmount: (state, action) => {
+      state.ordersAmount = action.payload
+    },
     clearIndicators: (state) => {
       state.volume = 0;
       state.weight = 0;
@@ -35,12 +42,13 @@ export const calculationSlice = createSlice({
       state.currency = 'EUR';
       state.country = null;
       state.carrier = null;
+      state.shippingRates = null;
       state.ordersAmount = 1;
       state.warehousePayment = false;
     }
   }
 });
 
-export const {setVolume, setWeight, setPrice, setCountry, setCarrier, clearIndicators} = calculationSlice.actions;
+export const {setVolume, setWeight, setPrice, setCountry, setCarrier, setShippingRates, setOrdersAmount, clearIndicators} = calculationSlice.actions;
 
 export default calculationSlice.reducer;

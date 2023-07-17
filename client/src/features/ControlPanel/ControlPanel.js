@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setPrice, setVolume, setWeight, setCountry, setCarrier, clearIndicators } from '../../store/slices/calculationSlice';
+import { setPrice, setVolume, setWeight, setCountry, setCarrier, setShippingRates, setOrdersAmount, clearIndicators } from '../../store/slices/calculationSlice';
 import { fetchCountries } from '../../store/slices/countriesSlice';
 import { fetchCarriers } from '../../store/slices/carriersSlice';
 
@@ -19,10 +19,12 @@ const ControlPanel = () => {
   const price = useSelector((state) => state.calculation.price);
   const country = useSelector((state) => state.calculation.country);
   const carrier = useSelector((state) => state.calculation.carrier);
+  const shippingRates = useSelector((state) => state.calculation.shippingRates);
+  const ordersAmount = useSelector((state) => state.calculation.ordersAmount);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCarrier, setSelectedCarrier] = useState('');
-  const [ordersAmount, setOrdersAmount] = useState('');
+  const [selectedOrdersAmount, setSelectedOrdersAmount] = useState('option1');
   const [isWarehouse, setIsWarehouse] = useState(false);
 
   const dispatch = useDispatch();
@@ -56,10 +58,13 @@ const ControlPanel = () => {
     dispatch(setPrice(newPrice));
   }
 
+  const findElementById = (array, id) => {
+    return array.find(element => element.id === id);
+  }
+
   useEffect(() => {
-    console.log(country); 
-    console.log(carrier); 
-  }, [volume, weight, price, country, carrier]);
+    console.log(ordersAmount);
+  }, [volume, weight, price, country, shippingRates, ordersAmount]);
 
   useEffect(() => {
     if(selectedCountry) {
@@ -72,14 +77,31 @@ const ControlPanel = () => {
   useEffect(() => {
     if(selectedCarrier) {
       dispatch(setCarrier(selectedCarrier));
+      let currentCarrier = findElementById(carriers, selectedCarrier);
+      dispatch(setShippingRates(currentCarrier.shippingRates))
     } else {
       dispatch(setCarrier(null));
     }
-  })
+  }, [selectedCarrier, dispatch, carriers]);
+
+  useEffect(() => {
+    if(selectedOrdersAmount && selectedOrdersAmount !== 'option3') {
+      let currentOrdersAmount = findElementById(ordersOptions, selectedOrdersAmount);
+      dispatch(setOrdersAmount(currentOrdersAmount.value));
+    } else if (selectedOrdersAmount === 'option3') {
+      let currentOrdersAmount = parseInt(prompt('Put your orders amount', []));
+      if(currentOrdersAmount !== isNaN) {
+        dispatch(setOrdersAmount(currentOrdersAmount));
+      }
+    }
+  }, [selectedOrdersAmount, dispatch]);
+
 
   const clearControlPanel = () => {
     dispatch(clearIndicators());
     setCalculationResult(0);
+    setSelectedCountry('');
+    setSelectedCarrier('');
   }
 
   const calculateResult = () => {
@@ -148,8 +170,8 @@ const ControlPanel = () => {
           <label key={option.id}>
             <input
               type='checkbox'
-              checked={ordersAmount === option.id}
-              onChange={() => setOrdersAmount(option.id)}
+              checked={selectedOrdersAmount === option.id}
+              onChange={() => setSelectedOrdersAmount(option.id)}
             />
             {option.label}
           </label>
